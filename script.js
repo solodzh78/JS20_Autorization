@@ -2,6 +2,14 @@
 
 function login(obj) {
 
+  let login = prompt('Введите логин');
+  let password = prompt('Введите пароль');
+  usersData.forEach(function(item, index) {
+    if (item.login === login && item.password === password) {
+      userNameSpan.textContent = usersData[index].firstName;
+    }
+  });
+
 }
 function register() {
   let userName = prompt('Введите ваше Имя Фамилию через пробел');
@@ -26,8 +34,8 @@ function register() {
 
 const registerBtn = document.getElementById('registerUser');
 const loginBtn = document.getElementById('login');
-const usernameSpan = document.getElementById('username');
-const listUl = document.getElementById('list');
+const userNameSpan = document.getElementById('username');
+const listUl = document.querySelector('.todo');
 
 registerBtn.addEventListener('click', register);
 loginBtn.addEventListener('click', login);
@@ -52,42 +60,35 @@ let usersData1 = [
 ];
 // =================================== render ================================================
 const render = function () {
+  listUl.textContent = '';
 
   usersData.forEach(function (item) {
     const li = document.createElement('li');
-    li.classList.add('user-item');
+    li.classList.add('todo-item');
+    li.setAttribute('regDate', item.regDate);
 
     li.innerHTML =
-      '<span class="text-user">' + 
+      '<span class="text-todo">' + 
       `Имя: ${item.firstName}, фамилия: ${item.lastName}, зарегистрирован: ${item.regDate}` +
       '</span>' +
-      '<div class="user-buttons">' +
-      '<button class="user-remove"></button>' +
+      '<div class="todo-buttons">' +
+      '<button class=""></button>' +
+      '<button class="todo-completed"></button>' +
       '</div>';
     listUl.append(li);
 
-    const btnUserRemove = li.querySelector('.user-remove');
-
     //  Удаление пользователя =================================================================
+    const btnUserRemove = li.querySelector('.todo-completed');
     btnUserRemove.addEventListener('click', function (e) {
-/*       const obj = {
-        value: e.target.parentNode.parentNode.childNodes[0].textContent,
-        completed: e.target.parentElement.parentElement.parentElement.id === 'todo'
-          ? false : true
-      };
+      const regDate = e.target.parentElement.parentElement.attributes.regdate.value;
 
-      let objIndex;
-      todoData.forEach(function (item, index) {
-        if (JSON.stringify(item) === JSON.stringify(obj)) {
-          objIndex = index;
+      usersData.forEach(function(item, index) {
+        if (item.regDate === regDate) {
+          usersData.splice(index, 1);
         }
       });
-
-      todoData.splice(objIndex, 1);
       refreshLocalStorage();
-
-      render(); */
-      console.log("Нажата кнопка удаления");
+      render();
     });
   });
 };

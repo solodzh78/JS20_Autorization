@@ -1,0 +1,163 @@
+@charset "UTF-8";
+
+
+html {
+    box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+body {
+    background-color: #f9f9f9;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.429;
+    color: black;
+}
+
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+h1, h2, h3, p {
+    padding: 0;
+    margin: 0;
+}
+
+
+body {
+    background: #edf0f1;
+    padding: 80px 0 0 0;
+}
+/* =============================================================================== */
+.user-container {
+    width: 100%;
+    float: left;
+    padding: 15px;
+}
+
+.header {
+    width: 100%;
+    height: 80px;
+    position: fixed;
+    padding: 15px;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    background-color: steelblue;
+    box-shadow: 0 2px 4px rgb(44 62 80 / 15%);
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.user-item {
+    width: 100%;
+    min-height: 50px;
+    float: left;
+    font-size: 14px;
+    font-weight: 500;
+    color: #444;
+    line-height: 22px;
+    background: #fff;
+    border-radius: 5px;
+    position: relative;
+    box-shadow: 0 1px 2px rgba(44, 62, 80, 0.10);
+    margin: 0 0 10px 0;
+    padding: 14px 100px 14px 14px;
+    word-break: break-word;
+}
+.list {
+    width: 100%;
+    float: left;
+}
+.user-buttons {
+    width: 100px;
+    height: 50px;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.user-buttons button {
+    width: 50px;
+    height: 50px;
+    float: left;
+    background-color: transparent;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    border: 0;
+    box-shadow: none;
+    outline: none;
+    cursor: pointer;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.user-buttons .buttons button:last-of-type:before {
+    content: '';
+    width: 1px;
+    height: 30px;
+    background: #edf0f1;
+
+    position: absolute;
+    top: 10px;
+    left: 0;
+}
+
+.user-remove {
+    background-image: url(trash.png);
+}
+
+.user-remove {
+    position: relative;
+    padding: 60px 0 0 0;
+}
+
+.user-remove:before {
+    content: '';
+    width: 150px;
+    height: 1px;
+    background: #d8e5e0;
+
+    position: absolute;
+    top: 30px;
+    left: 50%;
+
+    margin: 0 0 0 -75px;
+}
+
+.user:empty:after {
+    content: 'Нет задач';
+    margin: 15px 0 0 0;
+}
+
+.user-remove:empty:after {
+    content: 'Нет выполненых задач';
+}
+
+.list:after,
+.user-remove:after {
+    width: 100%;
+    display: block;
+    text-align: center;
+    font-size: 12px;
+    color: #aaa;
+}
