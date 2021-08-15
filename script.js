@@ -4,12 +4,13 @@ function login(obj) {
 
   let login = prompt('Введите логин');
   let password = prompt('Введите пароль');
-  usersData.forEach(function(item, index) {
-    if (item.login === login && item.password === password) {
-      userNameSpan.textContent = usersData[index].firstName;
-    } alert('Логин или пароль введены не верно');
-  });
-
+  for (let i = 0; i < usersData.length; i++) {
+    if (usersData[i].login === login && usersData[i].password === password) {
+      userNameSpan.textContent = usersData[i].firstName;
+      return;
+    } 
+  }
+  alert('Логин или пароль введены не верно');
 }
 function register() {
   let userName = prompt('Введите ваше Имя Фамилию через пробел');
