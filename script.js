@@ -7,7 +7,7 @@ function login(obj) {
   usersData.forEach(function(item, index) {
     if (item.login === login && item.password === password) {
       userNameSpan.textContent = usersData[index].firstName;
-    }
+    } alert('Логин или пароль введены не верно');
   });
 
 }
@@ -19,23 +19,40 @@ function register() {
     const newUserData = {
       firstName: strCleared[0], lastName: strCleared[1]
     };
-    let login = prompt('Введите логин');
+    let login;
+    do {
+      login = prompt('Введите логин');
+      if (login === null) {
+        return;
+      }
+    } while (checkLogin(login));
     let password = prompt('Введите пароль');
+    if (password === null) {
+      return;
+    }
     newUserData.login = login;
     newUserData.password = password;
     newUserData.regDate = new Date().toLocaleString("ru",
       { month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' });
-    console.log('obj: ', newUserData);
     usersData.push(newUserData);
     refreshLocalStorage();
     render();
   } else {alert('Данные введены не корректно');}
 }
+function checkLogin(login) {
+  for (let i = 0; i< usersData.length; i++) {
+    if (login === usersData[i].login){
+      alert('Пользователь с таким логином уже существует');
+      return true;
+    }
+  }
+  return false;
+}
 
 const registerBtn = document.getElementById('registerUser');
 const loginBtn = document.getElementById('login');
 const userNameSpan = document.getElementById('username');
-const listUl = document.querySelector('.todo');
+const listUl = document.querySelector('.list');
 
 registerBtn.addEventListener('click', register);
 loginBtn.addEventListener('click', login);
@@ -64,23 +81,20 @@ const render = function () {
 
   usersData.forEach(function (item) {
     const li = document.createElement('li');
-    li.classList.add('todo-item');
+    li.classList.add('list-item');
     li.setAttribute('regDate', item.regDate);
 
     li.innerHTML =
-      '<span class="text-todo">' + 
+      '<span class="list-text">' +
       `Имя: ${item.firstName}, фамилия: ${item.lastName}, зарегистрирован: ${item.regDate}` +
       '</span>' +
-      '<div class="todo-buttons">' +
-      '<button class=""></button>' +
-      '<button class="todo-completed"></button>' +
-      '</div>';
+      '<button class="list-remove"></button>';
     listUl.append(li);
 
     //  Удаление пользователя =================================================================
-    const btnUserRemove = li.querySelector('.todo-completed');
+    const btnUserRemove = li.querySelector('.list-remove');
     btnUserRemove.addEventListener('click', function (e) {
-      const regDate = e.target.parentElement.parentElement.attributes.regdate.value;
+      const regDate = e.target.parentElement.attributes.regdate.value;
 
       usersData.forEach(function(item, index) {
         if (item.regDate === regDate) {
