@@ -9,26 +9,35 @@ const AppData = function() {
   this.usersData = [];
 };
 
-AppData.prototype.login = function(obj) {
+AppData.prototype.login = function() {
   let login = prompt('Введите логин');
+  if (login === null) {return;}
   let password = prompt('Введите пароль');
+  if (password === null) {return;}
   for (let i = 0; i < this.usersData.length; i++) {
     if (this.usersData[i].login === login && this.usersData[i].password === password) {
       userNameSpan.textContent = this.usersData[i].firstName;
+      this.getAuthorizated(this.usersData[i]);
       return;
     } 
   }
   alert('Логин или пароль введены не верно');
 };
+AppData.prototype.getAuthorizated = function(obj) {
+  this.usersData.forEach((item, index) => {
+    this.usersData[index].authorizated = item.regDate === obj.regDate ? true : false;
+  });
+  this.refreshLocalStorage();
+};
 AppData.prototype.register = function() {
   let userName = prompt('Введите ваше Имя Фамилию через пробел');
+  if (userName === null) {return;}
   let strCleared = userName.trim().split(' ').filter(item => item !== '');
 
   if (strCleared.length === 2) {
     const newUserData = {
       firstName: strCleared[0], lastName: strCleared[1]
     };
-    console.log('register', this);
     let login;
     do {
       login = prompt('Введите логин');
@@ -44,6 +53,7 @@ AppData.prototype.register = function() {
     newUserData.password = password;
     newUserData.regDate = new Date().toLocaleString("ru",
       { month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' });
+    newUserData.authorizated = false;
     this.usersData.push(newUserData);
     this.refreshLocalStorage();
     this.render();
@@ -59,15 +69,14 @@ AppData.prototype.checkLogin = function(login) {
   return false;
 };
 AppData.prototype.addListerers = function() {
-  const _this = this;
-  console.log('addList: ', this);
-  registerBtn.addEventListener('click', _this.register.bind(_this));
-  loginBtn.addEventListener('click', _this.login.bind(_this));
+  registerBtn.addEventListener('click', () => {this.register();});
+  loginBtn.addEventListener('click', () => {this.login();});
 };
 //  Загрузка данных из localStorage ============================================================
 AppData.prototype.loadFromLocalStorage = function() {
-  this.usersData = (JSON.parse(localStorage.getItem('usersData')))
-    ? JSON.parse(localStorage.getItem('usersData')) : [];
+  this.usersData = (JSON.parse(localStorage.getItem('usersData'))) ? 
+                    JSON.parse(localStorage.getItem('usersData')) : 
+                    [];
 };
 //  Запись данных в localStorage ============================================================
 AppData.prototype.refreshLocalStorage = function () {
@@ -76,7 +85,7 @@ AppData.prototype.refreshLocalStorage = function () {
 // =================================== render ================================================
 AppData.prototype.render = function () {
   listUl.textContent = '';
-  this.usersData.forEach(function (item) {
+  this.usersData.forEach(item => {
     const li = document.createElement('li');
     li.classList.add('list-item');
     li.setAttribute('regDate', item.regDate);
@@ -87,10 +96,17 @@ AppData.prototype.render = function () {
       '<button class="list-remove"></button>';
     listUl.append(li);
     //  Удаление пользователя =================================================================
-    const _this = this;
     const btnUserRemove = li.querySelector('.list-remove');
-    btnUserRemove.addEventListener('click', _this.removeUser.bind(_this));
-  }, this);
+    btnUserRemove.addEventListener('click', (e) => {
+      console.log(this);
+      this.removeUser(e);});
+      let authorizationCount = 0;
+    if (item.authorizated) {
+      authorizationCount++;
+      userNameSpan.textContent = item.firstName;
+    }
+    if (authorizationCount === 0) {userNameSpan.textContent = 'Аноним';}
+  });
 };
 AppData.prototype.removeUser = function(e) {
   const regDate = e.target.parentElement.attributes.regdate.value;
@@ -109,5 +125,4 @@ AppData.prototype.init = function() {
 };
 
 const appData = new AppData();
-console.log('appData: ', appData);
 appData.init();
